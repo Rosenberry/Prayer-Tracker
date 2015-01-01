@@ -4,5 +4,9 @@
     <string name="app_name">Prayer Tracker</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="add_prayer_string_title">Add Prayer</string>
+    <string name="prayer_item_title">Title</string>
+    <string name="prayer_item_category">Category: </string>
+    <string name="prayer_item_message">This is the message.</string>
 
 </resources>
