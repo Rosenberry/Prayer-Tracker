@@ -8,5 +8,7 @@
     <string name="prayer_item_title">Title</string>
     <string name="prayer_item_category">Category: </string>
     <string name="prayer_item_message">This is the message.</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_add_new_prayer">AddNewPrayer</string>
 
 </resources>

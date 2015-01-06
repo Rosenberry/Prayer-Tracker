@@ -2,6 +2,8 @@ package com.learning.matthew.myapplication;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,20 +18,47 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity{
 
     private Person user;
+    private ArrayList<Prayer> userPrayerList;
     private ListView listView;
     private CustomAdapter adapter;
+    final static int ADD_ACTIVITY_REQUEST_CODE = 1;
+    final static int ADD_ACTIVITY_RESULT_CODE = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         user = new Person("Matthew");
+        user.createPrayer("Prayer test 1", "This is my first android prayer", Category.PRAISE);
+        userPrayerList = user.getPrayerList();
+        listView = (ListView) findViewById(R.id.listview);
+        adapter = new CustomAdapter(this, R.layout.prayer_item, userPrayerList);
+        listView.setAdapter(adapter);
     }
 
+    public void onActivityResult(int requestCode, int resultCode, Intent data){
+        if(requestCode == ADD_ACTIVITY_REQUEST_CODE)
+            if(resultCode == ADD_ACTIVITY_RESULT_CODE){
+
+                // get attached information from intent
+                String name = data.getStringExtra(AddNewPrayer.NAME);
+                String message = data.getStringExtra(AddNewPrayer.MESSAGE);
+                String sCat = data.getStringExtra(AddNewPrayer.CATEGORY);
+                Category category = Category.NO_CATEGORY;
+                for(Category a: Category.values())
+                    if(a.toString().equals(sCat))
+                        category = a;
+
+                // add a new prayer to the users list and update adapter
+                user.createPrayer(name, message, category);
+                adapter.notifyDataSetChanged();
+            }
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -39,54 +68,69 @@ public class MainActivity extends Activity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.add_prayer) {
-            Log.d("Main Activity", "Prayer Added");
-
+            Intent intent = new Intent(this, AddNewPrayer.class);
+            startActivityForResult(intent, ADD_ACTIVITY_REQUEST_CODE);
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
-    public class CustomAdapter extends ArrayAdapter<String> {
-        Context context;
-        int resourceId;
-        ArrayList<String> item;
 
-        public CustomAdapter(Context context, int resourceId, ArrayList<String> items) {
-            super(context, resourceId, items);
-            this.context = context;
-            this.resourceId = resourceId;
-            this.item = items;
-        }
 
-        public View getView(int position, View convertView, ViewGroup parent) {
-            View v = convertView;
-            if (v == null) {
-                LayoutInflater vi = getLayoutInflater();
-                v = vi.inflate(R.layout.prayer_item, null);
+    public class CustomAdapter extends ArrayAdapter<Prayer> {
+            Context context;
+            int resourceId;
+            ArrayList<Prayer> item;
+
+            public CustomAdapter(Context context, int resourceId, ArrayList<Prayer> items) {
+                super(context, resourceId, items);
+                this.context = context;
+                this.resourceId = resourceId;
+                this.item = items;
             }
 
-            TextView title = (TextView) v.findViewById(R.id.title);
-            TextView category = (TextView) v.findViewById(R.id.category);
-            TextView message = (TextView) v.findViewById(R.id.message);
-            ImageButton delete = (ImageButton) v.findViewById(R.id.delete);
-            Button increasePrayerCount = (Button) v.findViewById(R.id.counterButton);
+            public View getView(int position, View convertView, ViewGroup parent) {
+                View v = convertView;
+                if (v == null) {
+                    LayoutInflater vi = getLayoutInflater();
+                    v = vi.inflate(R.layout.prayer_item, null);
+                }
 
-            // TODO: set tags for buttons
-            // TODO: delete button
+                // instantiate the views for each list item
+                TextView title = (TextView) v.findViewById(R.id.title);
+                TextView category = (TextView) v.findViewById(R.id.category);
+                TextView message = (TextView) v.findViewById(R.id.message);
+                ImageButton delete = (ImageButton) v.findViewById(R.id.delete);
+                final Button increasePrayerCount = (Button) v.findViewById(R.id.counterButton);
+
+                // set tags
+                delete.setTag(position);
+                increasePrayerCount.setTag(position);
+
+                // get the related prayer from user
+                Prayer currentPrayer = user.getPrayer(position);
+
+                // set the text for each list item
+                title.setText(currentPrayer.getName());
+                Log.d("Main Activity", "Title added to position: " + position);
+                category.setText(currentPrayer.getCategory().toString());
+                message.setText(currentPrayer.getMessage());
+
+                // TODO: delete button
             increasePrayerCount.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View v){
                     int pos = (Integer)v.getTag();
-                    // TODO: increase the prayer count for the prayer at pos
+                    user.getPrayer(pos).pray();
+                    increasePrayerCount.setText("" + user.getPrayer(pos).getNumPrayers());
                 }
             });
-
-            return v;
-        }
+                return v;
     }
+}
 }

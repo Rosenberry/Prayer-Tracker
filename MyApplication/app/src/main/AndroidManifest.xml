@@ -16,6 +16,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".AddNewPrayer"
+            android:label="@string/title_activity_add_new_prayer"
+            android:parentActivityName=".MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.learning.matthew.myapplication.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

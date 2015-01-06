@@ -9,7 +9,7 @@ import java.util.ArrayList;
  */
 public class Person {
 
-    private ArrayList<Prayer> prayers = new ArrayList<Prayer>();
+    protected ArrayList<Prayer> prayers = new ArrayList<Prayer>();
     private String firstName;
 
     public Person(String n1){
@@ -18,12 +18,16 @@ public class Person {
 
     // add a new Prayer to the list
     public void createPrayer(String title, String message, Category category){
-        Prayer newPrayer = new Prayer(title, message, category);
-        prayers.add(newPrayer);
+        prayers.add(new Prayer(title, message, category));
+    }
+
+    // return the list of prayers
+    public ArrayList<Prayer> getPrayerList(){
+        return prayers;
     }
 
     // remove a prayer at the given position from the list
-    public void retirePrayer(int position){ prayers.remove(position); }
+    public void removePrayer(int position){ prayers.remove(position); }
 
     // return the Prayer at a given position
     public Prayer getPrayer(int position){
@@ -32,11 +36,10 @@ public class Person {
 
     // return a string array with the titles
     // of every prayer this person holds
-    public String[] getPrayerTitles(){
-        int limit = prayers.size();
-        String[] prayerTitles = new String[limit];
-        for(int i = 0; i < limit; i++){
-            prayerTitles[i] = prayers.get(i).getName();
+    public ArrayList<String> getPrayerTitles(){
+        ArrayList<String> prayerTitles = new ArrayList<String>();
+        for(int i = 0; i < prayers.size(); i++){
+            prayerTitles.add(prayers.get(i).getName());
         }
         return prayerTitles;
     }
