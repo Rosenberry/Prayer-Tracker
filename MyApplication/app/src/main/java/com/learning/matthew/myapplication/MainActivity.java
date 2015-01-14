@@ -25,7 +25,7 @@ public class MainActivity extends Activity{
     private Person user;
     private ArrayList<Prayer> userPrayerList;
     private ListView listView;
-    private CustomAdapter adapter;
+    private PrayerItemAdapter adapter;
     final static int ADD_ACTIVITY_REQUEST_CODE = 1;
     final static int ADD_ACTIVITY_RESULT_CODE = 1;
 
@@ -34,10 +34,9 @@ public class MainActivity extends Activity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         user = new Person("Matthew");
-        user.createPrayer("Prayer test 1", "This is my first android prayer", Category.PRAISE);
         userPrayerList = user.getPrayerList();
         listView = (ListView) findViewById(R.id.listview);
-        adapter = new CustomAdapter(this, R.layout.prayer_item, userPrayerList);
+        adapter = new PrayerItemAdapter(this, R.layout.prayer_item, userPrayerList);
         listView.setAdapter(adapter);
     }
 
@@ -48,11 +47,7 @@ public class MainActivity extends Activity{
                 // get attached information from intent
                 String name = data.getStringExtra(AddNewPrayer.NAME);
                 String message = data.getStringExtra(AddNewPrayer.MESSAGE);
-                String sCat = data.getStringExtra(AddNewPrayer.CATEGORY);
-                Category category = Category.NO_CATEGORY;
-                for(Category a: Category.values())
-                    if(a.toString().equals(sCat))
-                        category = a;
+                String category = data.getStringExtra(AddNewPrayer.CATEGORY);
 
                 // add a new prayer to the users list and update adapter
                 user.createPrayer(name, message, category);
@@ -82,12 +77,12 @@ public class MainActivity extends Activity{
     }
 
 
-    public class CustomAdapter extends ArrayAdapter<Prayer> {
+    public class PrayerItemAdapter extends ArrayAdapter<Prayer> {
             Context context;
             int resourceId;
             ArrayList<Prayer> item;
 
-            public CustomAdapter(Context context, int resourceId, ArrayList<Prayer> items) {
+            public PrayerItemAdapter(Context context, int resourceId, ArrayList<Prayer> items) {
                 super(context, resourceId, items);
                 this.context = context;
                 this.resourceId = resourceId;
@@ -108,7 +103,7 @@ public class MainActivity extends Activity{
                 ImageButton delete = (ImageButton) v.findViewById(R.id.delete);
                 final Button increasePrayerCount = (Button) v.findViewById(R.id.counterButton);
 
-                // set tags
+                // set tags, used to tell objects apart later
                 delete.setTag(position);
                 increasePrayerCount.setTag(position);
 
@@ -117,11 +112,10 @@ public class MainActivity extends Activity{
 
                 // set the text for each list item
                 title.setText(currentPrayer.getName());
-                Log.d("Main Activity", "Title added to position: " + position);
                 category.setText(currentPrayer.getCategory().toString());
                 message.setText(currentPrayer.getMessage());
 
-                // TODO: delete button
+            // set onClick to count number of prayers
             increasePrayerCount.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View v){
@@ -130,7 +124,17 @@ public class MainActivity extends Activity{
                     increasePrayerCount.setText("" + user.getPrayer(pos).getNumPrayers());
                 }
             });
-                return v;
+
+            // set onClick to remove prayers from the list
+            delete.setOnClickListener(new View.OnClickListener(){
+                @Override
+                public void onClick(View v){
+                    int pos = (Integer)v.getTag();
+                    user.removePrayer(pos);
+                    adapter.notifyDataSetChanged();
+                }
+            });
+            return v;
     }
 }
 }

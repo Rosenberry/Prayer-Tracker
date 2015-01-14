@@ -27,6 +27,7 @@ public class AddNewPrayer extends Activity {
     public static final String NAME = "n";
     public static final String MESSAGE = "m";
     public static final String CATEGORY = "c";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,18 +37,10 @@ public class AddNewPrayer extends Activity {
         addItemsOnCategorySpinner();
     }
 
+    // gives the Spinner an adapter
     public void addItemsOnCategorySpinner() {
-
-        List<String> list = new ArrayList<String>();
-
-        // populate the list with the string equivalent of categories
-        for(Category a: Category.values()){
-            list.add(a.toString());
-        }
-
-        // gives the Spinner an adapter
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_spinner_item, list);
+                android.R.layout.simple_spinner_item, Person.Categories);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         categorySpinner.setAdapter(dataAdapter);
     }
