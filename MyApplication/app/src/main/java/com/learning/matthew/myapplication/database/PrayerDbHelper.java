@@ -33,12 +33,15 @@ public class PrayerDbHelper extends SQLiteOpenHelper{
     public void onCreate(SQLiteDatabase db)
     {
         //TODO: create tables
-        //db.execSQL();
+        db.execSQL(GroupingTable.CREATE_SQL_ENTREES);
+        db.execSQL(PrayersTable.CREATE_SQL_ENTREES);
     }
 
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion)
     {
-
+        db.execSQL(GroupingTable.SQL_DELETE_ENTRIES);
+        db.execSQL(PrayersTable.SQL_DELETE_ENTRIES);
+        onCreate(db);
     }
 
     public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion)
