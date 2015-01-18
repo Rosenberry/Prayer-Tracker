@@ -1,4 +1,4 @@
-package com.learning.matthew.myapplication;
+package com.learning.matthew.myapplication.CustomObjects;
 /**
  * Created by Matthew on 12/31/2014.
  * An object that contains the information for a single prayer.

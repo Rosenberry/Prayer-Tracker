@@ -1,9 +1,10 @@
-package com.learning.matthew.myapplication;
+package com.learning.matthew.myapplication.CustomObjects;
 /**
  * Created by Matthew on 12/31/2014.
  * An object to contain a list of prayers and retain information for a single user.
  * Each Person has a list of Prayers and a name.
  */
+
 import java.util.ArrayList;
 
 public class Person {

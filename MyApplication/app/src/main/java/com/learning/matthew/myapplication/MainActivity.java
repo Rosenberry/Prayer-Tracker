@@ -3,9 +3,7 @@ package com.learning.matthew.myapplication;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -17,8 +15,10 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.learning.matthew.myapplication.CustomObjects.Person;
+import com.learning.matthew.myapplication.CustomObjects.Prayer;
+
 import java.util.ArrayList;
-import java.util.List;
 
 public class MainActivity extends Activity{
 
