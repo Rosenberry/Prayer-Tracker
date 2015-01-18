@@ -15,8 +15,8 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.learning.matthew.myapplication.CustomObjects.Person;
-import com.learning.matthew.myapplication.CustomObjects.Prayer;
+import com.learning.matthew.myapplication.database.Person;
+import com.learning.matthew.myapplication.database.Prayer;
 
 import java.util.ArrayList;
 
@@ -26,14 +26,14 @@ public class MainActivity extends Activity{
     private ArrayList<Prayer> userPrayerList;
     private ListView listView;
     private PrayerItemAdapter adapter;
-    final static int ADD_ACTIVITY_REQUEST_CODE = 1;
-    final static int ADD_ACTIVITY_RESULT_CODE = 1;
+    final static int ADD_PRAYER_REQUEST_CODE = 1;
+    final static int ADD_PRAYER_RESULT_CODE = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        user = new Person("Matthew");
+        user = new Person("");
         userPrayerList = user.getPrayerList();
         listView = (ListView) findViewById(R.id.listview);
         adapter = new PrayerItemAdapter(this, R.layout.prayer_item, userPrayerList);
@@ -41,8 +41,8 @@ public class MainActivity extends Activity{
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data){
-        if(requestCode == ADD_ACTIVITY_REQUEST_CODE)
-            if(resultCode == ADD_ACTIVITY_RESULT_CODE){
+        if(requestCode == ADD_PRAYER_REQUEST_CODE)
+            if(resultCode == ADD_PRAYER_RESULT_CODE){
 
                 // get attached information from intent
                 String name = data.getStringExtra(AddNewPrayer.NAME);
@@ -70,7 +70,7 @@ public class MainActivity extends Activity{
         int id = item.getItemId();
         if (id == R.id.add_prayer) {
             Intent intent = new Intent(this, AddNewPrayer.class);
-            startActivityForResult(intent, ADD_ACTIVITY_REQUEST_CODE);
+            startActivityForResult(intent, ADD_PRAYER_REQUEST_CODE);
             return true;
         }
         return super.onOptionsItemSelected(item);

@@ -11,12 +11,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
-import com.learning.matthew.myapplication.CustomObjects.Person;
+import com.learning.matthew.myapplication.database.Person;
 
 
 public class AddNewPrayer extends Activity {
 
-    private final int RESULT_CODE = MainActivity.ADD_ACTIVITY_RESULT_CODE;
+    private final int RESULT_CODE = MainActivity.ADD_PRAYER_RESULT_CODE;
     private EditText editName;
     private EditText editMessage;
     private Spinner categorySpinner;

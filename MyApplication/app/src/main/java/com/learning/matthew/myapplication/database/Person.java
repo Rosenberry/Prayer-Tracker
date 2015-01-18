@@ -1,4 +1,4 @@
-package com.learning.matthew.myapplication.CustomObjects;
+package com.learning.matthew.myapplication.database;
 /**
  * Created by Matthew on 12/31/2014.
  * An object to contain a list of prayers and retain information for a single user.
@@ -10,7 +10,7 @@ import java.util.ArrayList;
 public class Person {
 
     private ArrayList<Prayer> prayers;
-    protected static ArrayList<String> Categories;
+    public static ArrayList<String> Categories;
     private String firstName;
 
     public Person(String n1){

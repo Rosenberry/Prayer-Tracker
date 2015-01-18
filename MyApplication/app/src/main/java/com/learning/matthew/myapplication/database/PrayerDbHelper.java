@@ -1,5 +1,6 @@
 package com.learning.matthew.myapplication.database;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -47,5 +48,25 @@ public class PrayerDbHelper extends SQLiteOpenHelper{
     public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion)
     {
         onUpgrade(db, oldVersion, newVersion);
+    }
+
+    /*
+    * insert a Prayer into PrayersTable
+    */
+    public long insertPrayer(Prayer p, long[] tag_ids) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(PrayersTable.COLUMN_TITLE, p.getName());
+        values.put(PrayersTable.COLUMN_CATEGORY, p.getCategory());
+        values.put(PrayersTable.COLUMN_MESSAGE, p.getMessage());
+        values.put(PrayersTable.COLUMN_COUNT, 0);
+        //TODO: put other data for the table into values
+
+        // insert row
+        long prayer_id = db.insert(PrayersTable.TABLE_NAME, null, values);
+
+
+        return prayer_id;
     }
 }

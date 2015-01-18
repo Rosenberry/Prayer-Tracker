@@ -12,9 +12,9 @@ public class PrayersTable {
 
     // column names
     protected static final String PRAYERTABLE_ID = "PrayerTable_ID";
-    protected static final String COLUMN_TITLE_NAME = "Title";
-    protected static final String COLUMN_CATEGORY_NAME = "Category";
-    protected static final String COLUMN_MESSAGE_NAME = "Message";
+    protected static final String COLUMN_TITLE = "Title";
+    protected static final String COLUMN_CATEGORY = "Category";
+    protected static final String COLUMN_MESSAGE = "Message";
     protected static final String COLUMN_COUNT = "Count";
     protected static final String COLUMN_ANSWERED_PRAYER_BOOLEAN = "APboolean";
     protected static final String COLUMN_ANSWERED_PRAYER_MESSAGE = "APtext";
@@ -28,9 +28,9 @@ public class PrayersTable {
     public static final String CREATE_SQL_ENTREES =
             CREATE_TABLE + TABLE_NAME + " (" +
                     PRAYERTABLE_ID + " INTEGER PRIMARY KEY AUTO INCREMENT " + COMMA_SEP +
-                    COLUMN_TITLE_NAME + TEXT_TYPE + COMMA_SEP +
-                    COLUMN_CATEGORY_NAME + TEXT_TYPE + COMMA_SEP +
-                    COLUMN_MESSAGE_NAME + TEXT_TYPE + COMMA_SEP +
+                    COLUMN_TITLE + TEXT_TYPE + COMMA_SEP +
+                    COLUMN_CATEGORY + TEXT_TYPE + COMMA_SEP +
+                    COLUMN_MESSAGE + TEXT_TYPE + COMMA_SEP +
                     COLUMN_COUNT + INTEGER_TYPE + COMMA_SEP +
                     COLUMN_ANSWERED_PRAYER_BOOLEAN + INTEGER_TYPE + COMMA_SEP +
                     COLUMN_ANSWERED_PRAYER_MESSAGE + TEXT_TYPE + COMMA_SEP +
