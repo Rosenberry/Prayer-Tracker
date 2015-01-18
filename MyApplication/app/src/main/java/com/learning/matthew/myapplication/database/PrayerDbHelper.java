@@ -7,6 +7,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import java.util.ArrayList;
+
 /**
  * Helper class for SQL interactions with the prayer database.
  *
@@ -94,6 +96,35 @@ public class PrayerDbHelper extends SQLiteOpenHelper{
         p.setCategory(c.getString(c.getColumnIndex(PrayersTable.COLUMN_CATEGORY)));
 
         return p;
+    }
+
+    /*
+    * return a list of all Prayers
+    * */
+    public ArrayList<Prayer> getAllPrayers() {
+        ArrayList<Prayer> prayers = new ArrayList<Prayer>();
+        String selectQuery = "SELECT  * FROM " + PrayersTable.TABLE_NAME;
+
+        Log.e("PrayerDbHelper", selectQuery);
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        // looping through all rows and adding to list
+        if (c.moveToFirst()) {
+            do {
+                Prayer p = new Prayer();
+                p.setId(c.getInt(c.getColumnIndex(PrayersTable._ID)));
+                p.setName((c.getString(c.getColumnIndex(PrayersTable.COLUMN_TITLE))));
+                p.setMessage(c.getString(c.getColumnIndex(PrayersTable.COLUMN_MESSAGE)));
+                p.setCategory(c.getString(c.getColumnIndex(PrayersTable.COLUMN_CATEGORY)));
+
+                // adding to todo list
+                prayers.add(p);
+            } while (c.moveToNext());
+        }
+
+        return prayers;
     }
 
 
