@@ -17,27 +17,38 @@ import android.widget.TextView;
 
 import com.learning.matthew.myapplication.database.Person;
 import com.learning.matthew.myapplication.database.Prayer;
+import com.learning.matthew.myapplication.database.PrayerDbHelper;
 
 import java.util.ArrayList;
 
 public class MainActivity extends Activity{
 
-    private Person user;
+    //private Person user;
     private ArrayList<Prayer> userPrayerList;
     private ListView listView;
     private PrayerItemAdapter adapter;
+    PrayerDbHelper db;
     final static int ADD_PRAYER_REQUEST_CODE = 1;
     final static int ADD_PRAYER_RESULT_CODE = 1;
+    public static ArrayList<String> Categories;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        user = new Person("");
-        userPrayerList = user.getPrayerList();
+        //user = new Person("");
+        userPrayerList = new ArrayList<Prayer>();
         listView = (ListView) findViewById(R.id.listview);
         adapter = new PrayerItemAdapter(this, R.layout.prayer_item, userPrayerList);
         listView.setAdapter(adapter);
+        db = new PrayerDbHelper(getApplicationContext());
+        Categories = new ArrayList<String>();
+        Categories.add("Request");
+        Categories.add("Praise");
+        Categories.add("Protection");
+        Categories.add("Strength");
+        Categories.add("Courage");
+        Categories.add("Healing");
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data){
@@ -49,8 +60,10 @@ public class MainActivity extends Activity{
                 String message = data.getStringExtra(AddNewPrayer.MESSAGE);
                 String category = data.getStringExtra(AddNewPrayer.CATEGORY);
 
+
                 // add a new prayer to the users list and update adapter
-                user.createPrayer(name, message, category);
+                long newId = db.insertPrayer(new Prayer(name, message, category));
+                userPrayerList.add(new Prayer(name, message, category, newId));
                 adapter.notifyDataSetChanged();
             }
     }
@@ -108,7 +121,9 @@ public class MainActivity extends Activity{
                 increasePrayerCount.setTag(position);
 
                 // get the related prayer from user
-                Prayer currentPrayer = user.getPrayer(position);
+                Prayer currentPrayer = userPrayerList.get(position);
+                long currentPrayer_id = currentPrayer.getId();
+                Prayer dbPrayer = db.getPrayer(currentPrayer_id);
 
                 // set the text for each list item
                 title.setText(currentPrayer.getName());
@@ -120,8 +135,10 @@ public class MainActivity extends Activity{
                 @Override
                 public void onClick(View v){
                     int pos = (Integer)v.getTag();
-                    user.getPrayer(pos).pray();
-                    increasePrayerCount.setText("" + user.getPrayer(pos).getNumPrayers());
+                    Prayer thisPrayer = userPrayerList.get(pos);
+                    thisPrayer.pray();
+                    db.updatePrayer(thisPrayer);
+                    increasePrayerCount.setText("" + userPrayerList.get(pos).getNumPrayers());
                 }
             });
 
@@ -130,7 +147,9 @@ public class MainActivity extends Activity{
                 @Override
                 public void onClick(View v){
                     int pos = (Integer)v.getTag();
-                    user.removePrayer(pos);
+                    Prayer thisPrayer = userPrayerList.get(pos);
+                    userPrayerList.remove(pos);
+                    db.deletePrayer(thisPrayer.getId());
                     adapter.notifyDataSetChanged();
                 }
             });

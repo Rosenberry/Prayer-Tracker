@@ -6,7 +6,7 @@ import android.provider.BaseColumns;
  * Created by Matthew on 1/17/2015.
  */
 public class PrayersTable {
-    protected static final String CREATE_TABLE = "CREATE TABLE ";
+    protected static final String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS ";
     protected static final String COMMA_SEP = ",";
     protected static final String TABLE_NAME = "Prayers";
 
@@ -21,7 +21,7 @@ public class PrayersTable {
     protected static final String COLUMN_LINK = "GroupTableID";
 
     // table data types
-    protected static final String INTEGER_PRIMARY_KEY_AUTO = " INTEGER PRIMARY KEY AUTO INCREMENT";
+    protected static final String INTEGER_PRIMARY_KEY_AUTO = " INTEGER PRIMARY KEY AUTOINCREMENT ";
     protected static final String TEXT_TYPE = " TEXT";
     protected static final String INTEGER_TYPE = " INTEGER";
 

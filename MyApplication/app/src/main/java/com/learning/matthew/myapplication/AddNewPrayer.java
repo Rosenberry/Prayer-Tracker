@@ -37,7 +37,7 @@ public class AddNewPrayer extends Activity {
     // gives the Spinner an adapter
     public void addItemsOnCategorySpinner() {
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_spinner_item, Person.Categories);
+                android.R.layout.simple_spinner_item, MainActivity.Categories);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         categorySpinner.setAdapter(dataAdapter);
     }

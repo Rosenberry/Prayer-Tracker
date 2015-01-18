@@ -11,13 +11,22 @@ public class Prayer {
     private String name, message, category;
     private int counter;
 
-    // Creates a Prayer
+    // constructor
     public Prayer(String n, String m, String cat){
         this.name = n;
         this.message = m;
         this.category = cat;
     }
 
+    // constructor
+    public Prayer(String n, String m, String cat, long id){
+        this.name = n;
+        this.message = m;
+        this.category = cat;
+        this.id = id;
+    }
+
+    // empty constructor
     public Prayer(){
     }
 

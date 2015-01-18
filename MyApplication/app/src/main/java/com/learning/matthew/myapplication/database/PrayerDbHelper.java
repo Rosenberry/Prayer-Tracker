@@ -21,7 +21,7 @@ public class PrayerDbHelper extends SQLiteOpenHelper{
 
     private static PrayerDbHelper instance = null;
 
-    private PrayerDbHelper(Context context)
+    public PrayerDbHelper(Context context)
     {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
@@ -57,20 +57,34 @@ public class PrayerDbHelper extends SQLiteOpenHelper{
     /*
     * insert a Prayer into PrayersTable
     */
-    public long insertPrayer(Prayer p, long[] tag_ids) {
+    public long insertPrayer(Prayer p) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
         values.put(PrayersTable.COLUMN_TITLE, p.getName());
         values.put(PrayersTable.COLUMN_CATEGORY, p.getCategory());
         values.put(PrayersTable.COLUMN_MESSAGE, p.getMessage());
-        values.put(PrayersTable.COLUMN_COUNT, 0);
+        values.put(PrayersTable.COLUMN_COUNT, p.getNumPrayers());
         //TODO: put other data for the table into values
 
         // insert row
         long prayer_id = db.insert(PrayersTable.TABLE_NAME, null, values);
 
         return prayer_id;
+    }
+
+    /*
+    * Updating a Prayer
+    */
+    public int updatePrayer(Prayer p) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(PrayersTable.COLUMN_COUNT, p.getNumPrayers());
+
+        // updating row
+        return db.update(PrayersTable.TABLE_NAME, values, PrayersTable._ID + " = ?",
+                new String[] { String.valueOf(p.getId()) });
     }
 
     /*
@@ -130,10 +144,11 @@ public class PrayerDbHelper extends SQLiteOpenHelper{
     /*
     * Deletes a Prayer from database
     */
-    public void deletePrayer(long tado_id) {
+    public void deletePrayer(long prayer_id) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(PrayersTable.TABLE_NAME, PrayersTable._ID + " = ?",
-                new String[] { String.valueOf(tado_id) });
+                new String[] { String.valueOf(prayer_id) });
+        Log.e("PrayerDbHelper", "Prayer " + prayer_id + " deleted from PrayersTable" );
     }
 
     // closing database

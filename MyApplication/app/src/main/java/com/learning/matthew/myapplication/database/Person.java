@@ -10,19 +10,13 @@ import java.util.ArrayList;
 public class Person {
 
     private ArrayList<Prayer> prayers;
-    public static ArrayList<String> Categories;
+
     private String firstName;
 
     public Person(String n1){
         firstName = n1;
         prayers = new ArrayList<Prayer>();
-        Categories = new ArrayList<String>();
-        Categories.add("Request");
-        Categories.add("Praise");
-        Categories.add("Protection");
-        Categories.add("Strength");
-        Categories.add("Courage");
-        Categories.add("Healing");
+
     }
 
     public ArrayList<Prayer> getPrayerList(){
