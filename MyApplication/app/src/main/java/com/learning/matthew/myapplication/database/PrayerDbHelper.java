@@ -127,5 +127,12 @@ public class PrayerDbHelper extends SQLiteOpenHelper{
         return prayers;
     }
 
-
+    /*
+    * Deleting a todo
+    */
+    public void deletePrayer(long tado_id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(PrayersTable.TABLE_NAME, PrayersTable._ID + " = ?",
+                new String[] { String.valueOf(tado_id) });
+    }
 }
