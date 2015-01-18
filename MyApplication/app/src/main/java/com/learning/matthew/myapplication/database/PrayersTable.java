@@ -11,7 +11,7 @@ public class PrayersTable {
     protected static final String TABLE_NAME = "Prayers";
 
     // column names
-    protected static final String PRAYERTABLE_ID = "PrayerTable_ID";
+    protected static final String _ID = "PrayerTable_ID";
     protected static final String COLUMN_TITLE = "Title";
     protected static final String COLUMN_CATEGORY = "Category";
     protected static final String COLUMN_MESSAGE = "Message";
@@ -21,13 +21,13 @@ public class PrayersTable {
     protected static final String COLUMN_LINK = "GroupTableID";
 
     // table data types
-    protected static final String INTEGER_PRIMARY_KEY = " INTEGER PRIMARY KEY";
+    protected static final String INTEGER_PRIMARY_KEY_AUTO = " INTEGER PRIMARY KEY AUTO INCREMENT";
     protected static final String TEXT_TYPE = " TEXT";
     protected static final String INTEGER_TYPE = " INTEGER";
 
     public static final String CREATE_SQL_ENTREES =
             CREATE_TABLE + TABLE_NAME + " (" +
-                    PRAYERTABLE_ID + " INTEGER PRIMARY KEY AUTO INCREMENT " + COMMA_SEP +
+                    _ID + INTEGER_PRIMARY_KEY_AUTO + COMMA_SEP +
                     COLUMN_TITLE + TEXT_TYPE + COMMA_SEP +
                     COLUMN_CATEGORY + TEXT_TYPE + COMMA_SEP +
                     COLUMN_MESSAGE + TEXT_TYPE + COMMA_SEP +

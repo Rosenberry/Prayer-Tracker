@@ -7,6 +7,7 @@ package com.learning.matthew.myapplication.database;
  */
 public class Prayer {
 
+    private long id;
     private String name, message, category;
     private int counter;
 
@@ -15,6 +16,9 @@ public class Prayer {
         this.name = n;
         this.message = m;
         this.category = cat;
+    }
+
+    public Prayer(){
     }
 
     // returns name
@@ -30,6 +34,31 @@ public class Prayer {
     // returns category
     public String getCategory(){
         return category;
+    }
+
+    // return id
+    public long getId() {
+        return id;
+    }
+
+    // set id
+    public void setId(long id){
+        this.id = id;
+    }
+
+    // set name
+    public void setName(String title){
+        this.name = title;
+    }
+
+    // set message
+    public void setMessage(String message){
+        this.message = message;
+    }
+
+    // set category
+    public void setCategory(String category){
+        this.category = category;
     }
 
     // increases the count by one

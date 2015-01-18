@@ -2,8 +2,10 @@ package com.learning.matthew.myapplication.database;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 /**
  * Helper class for SQL interactions with the prayer database.
@@ -66,7 +68,33 @@ public class PrayerDbHelper extends SQLiteOpenHelper{
         // insert row
         long prayer_id = db.insert(PrayersTable.TABLE_NAME, null, values);
 
-
         return prayer_id;
     }
+
+    /*
+    * return a single Prayer from PrayersTable
+    */
+    public Prayer getPrayer(long prayer_id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String selectQuery = "SELECT  * FROM " + PrayersTable.TABLE_NAME + " WHERE "
+                + PrayersTable._ID + " = " + prayer_id;
+
+        Log.e("PrayerDbHelper", selectQuery);
+
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        if (c != null)
+            c.moveToFirst();
+
+        Prayer p = new Prayer();
+        p.setId(c.getInt(c.getColumnIndex(PrayersTable._ID)));
+        p.setName((c.getString(c.getColumnIndex(PrayersTable.COLUMN_TITLE))));
+        p.setMessage(c.getString(c.getColumnIndex(PrayersTable.COLUMN_MESSAGE)));
+        p.setCategory(c.getString(c.getColumnIndex(PrayersTable.COLUMN_CATEGORY)));
+
+        return p;
+    }
+
+
 }
