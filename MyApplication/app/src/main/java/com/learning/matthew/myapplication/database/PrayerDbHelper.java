@@ -38,6 +38,7 @@ public class PrayerDbHelper extends SQLiteOpenHelper{
     public void onCreate(SQLiteDatabase db)
     {
         //TODO: create tables
+        Log.e("PrayerDbHelper", "tables creating..");
         db.execSQL(GroupingTable.CREATE_SQL_ENTREES);
         db.execSQL(PrayersTable.CREATE_SQL_ENTREES);
     }
@@ -59,6 +60,7 @@ public class PrayerDbHelper extends SQLiteOpenHelper{
     */
     public long insertPrayer(Prayer p) {
         SQLiteDatabase db = this.getWritableDatabase();
+        Log.e("PrayerDbHelper", "inserting prayer..");
 
         ContentValues values = new ContentValues();
         values.put(PrayersTable.COLUMN_TITLE, p.getName());
@@ -81,6 +83,8 @@ public class PrayerDbHelper extends SQLiteOpenHelper{
 
         ContentValues values = new ContentValues();
         values.put(PrayersTable.COLUMN_COUNT, p.getNumPrayers());
+
+        Log.e("PrayerDbHelper", "updating prayer..");
 
         // updating row
         return db.update(PrayersTable.TABLE_NAME, values, PrayersTable._ID + " = ?",
@@ -108,6 +112,7 @@ public class PrayerDbHelper extends SQLiteOpenHelper{
         p.setName((c.getString(c.getColumnIndex(PrayersTable.COLUMN_TITLE))));
         p.setMessage(c.getString(c.getColumnIndex(PrayersTable.COLUMN_MESSAGE)));
         p.setCategory(c.getString(c.getColumnIndex(PrayersTable.COLUMN_CATEGORY)));
+        p.setCounter(c.getInt(c.getColumnIndex(PrayersTable.COLUMN_COUNT)));
 
         return p;
     }
@@ -145,6 +150,7 @@ public class PrayerDbHelper extends SQLiteOpenHelper{
     * Deletes a Prayer from database
     */
     public void deletePrayer(long prayer_id) {
+        Log.e("PrayerDbHelper", "deletePrayer() has been called");
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(PrayersTable.TABLE_NAME, PrayersTable._ID + " = ?",
                 new String[] { String.valueOf(prayer_id) });

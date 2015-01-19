@@ -70,6 +70,11 @@ public class Prayer {
         this.category = category;
     }
 
+    // set counter
+    public void setCounter(int count){
+       this.counter = count;
+    }
+
     // increases the count by one
     public void pray(){
         this.counter++;

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -23,8 +24,9 @@ import java.util.ArrayList;
 
 public class MainActivity extends Activity{
 
-    //private Person user;
-    private ArrayList<Prayer> userPrayerList;
+
+   // private ArrayList<Prayer> userPrayerList;
+    private ArrayList<Long> prayer_ids;
     private ListView listView;
     private PrayerItemAdapter adapter;
     PrayerDbHelper db;
@@ -36,10 +38,10 @@ public class MainActivity extends Activity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        //user = new Person("");
-        userPrayerList = new ArrayList<Prayer>();
+
+        prayer_ids = new ArrayList<Long>();
         listView = (ListView) findViewById(R.id.listview);
-        adapter = new PrayerItemAdapter(this, R.layout.prayer_item, userPrayerList);
+        adapter = new PrayerItemAdapter(this, R.layout.prayer_item, prayer_ids);
         listView.setAdapter(adapter);
         db = new PrayerDbHelper(getApplicationContext());
         Categories = new ArrayList<String>();
@@ -63,8 +65,9 @@ public class MainActivity extends Activity{
 
                 // add a new prayer to the users list and update adapter
                 long newId = db.insertPrayer(new Prayer(name, message, category));
-                userPrayerList.add(new Prayer(name, message, category, newId));
+                prayer_ids.add(new Long(newId));
                 adapter.notifyDataSetChanged();
+                Log.e("MainActivity", "adapter notified of change");
             }
     }
 
@@ -90,16 +93,16 @@ public class MainActivity extends Activity{
     }
 
 
-    public class PrayerItemAdapter extends ArrayAdapter<Prayer> {
+    public class PrayerItemAdapter extends ArrayAdapter<Long> {
             Context context;
             int resourceId;
-            ArrayList<Prayer> item;
+            ArrayList<Long> item_id;
 
-            public PrayerItemAdapter(Context context, int resourceId, ArrayList<Prayer> items) {
+            public PrayerItemAdapter(Context context, int resourceId, ArrayList<Long> items) {
                 super(context, resourceId, items);
                 this.context = context;
                 this.resourceId = resourceId;
-                this.item = items;
+                this.item_id = items;
             }
 
             public View getView(int position, View convertView, ViewGroup parent) {
@@ -120,25 +123,26 @@ public class MainActivity extends Activity{
                 delete.setTag(position);
                 increasePrayerCount.setTag(position);
 
-                // get the related prayer from user
-                Prayer currentPrayer = userPrayerList.get(position);
-                long currentPrayer_id = currentPrayer.getId();
-                Prayer dbPrayer = db.getPrayer(currentPrayer_id);
+                // get the related prayer from database
+                long currentPrayer_id = item_id.get(position);
+                Prayer dbCurrentPrayer = db.getPrayer(currentPrayer_id);
 
                 // set the text for each list item
-                title.setText(currentPrayer.getName());
-                category.setText(currentPrayer.getCategory().toString());
-                message.setText(currentPrayer.getMessage());
+                title.setText(dbCurrentPrayer.getName());
+                category.setText(dbCurrentPrayer.getCategory());
+                message.setText(dbCurrentPrayer.getMessage());
 
             // set onClick to count number of prayers
             increasePrayerCount.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View v){
                     int pos = (Integer)v.getTag();
-                    Prayer thisPrayer = userPrayerList.get(pos);
+                    Prayer thisPrayer = db.getPrayer(item_id.get(pos));
                     thisPrayer.pray();
                     db.updatePrayer(thisPrayer);
-                    increasePrayerCount.setText("" + userPrayerList.get(pos).getNumPrayers());
+
+                    //TODO: write a new query for this
+                    increasePrayerCount.setText("" + db.getPrayer(item_id.get(pos)).getNumPrayers());
                 }
             });
 
@@ -147,9 +151,9 @@ public class MainActivity extends Activity{
                 @Override
                 public void onClick(View v){
                     int pos = (Integer)v.getTag();
-                    Prayer thisPrayer = userPrayerList.get(pos);
-                    userPrayerList.remove(pos);
+                    Prayer thisPrayer = db.getPrayer(item_id.get(pos));
                     db.deletePrayer(thisPrayer.getId());
+                    item_id.remove(pos);
                     adapter.notifyDataSetChanged();
                 }
             });
