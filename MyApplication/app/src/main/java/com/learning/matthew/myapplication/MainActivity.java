@@ -137,12 +137,8 @@ public class MainActivity extends Activity{
                 @Override
                 public void onClick(View v){
                     int pos = (Integer)v.getTag();
-                    Prayer thisPrayer = db.getPrayer(item_id.get(pos));
-                    thisPrayer.pray();
-                    db.updatePrayer(thisPrayer);
-
-                    //TODO: write a new query for this
-                    increasePrayerCount.setText("" + db.getPrayer(item_id.get(pos)).getNumPrayers());
+                    db.increaseCount(item_id.get(pos));
+                    increasePrayerCount.setText("" + db.getPrayerCount(item_id.get(pos)));
                 }
             });
 

@@ -76,34 +76,51 @@ public class PrayerDbHelper extends SQLiteOpenHelper{
     }
 
     /*
-    * Updating a Prayer
+    * Increase the counter for a single prayer
     */
-    public int updatePrayer(Prayer p) {
+    public int increaseCount(long prayer_id) {
         SQLiteDatabase db = this.getWritableDatabase();
+        String selectQuery = PrayersTable.SQL_GET_COUNT + prayer_id;
+        Log.e("PrayerDbHelper", selectQuery);
 
+        Cursor c = db.rawQuery(selectQuery, null);
+        if (c != null)
+            c.moveToFirst();
         ContentValues values = new ContentValues();
-        values.put(PrayersTable.COLUMN_COUNT, p.getNumPrayers());
-
-        Log.e("PrayerDbHelper", "updating prayer..");
-
+        int count = c.getInt(c.getColumnIndex(PrayersTable.COLUMN_COUNT));
+        values.put(PrayersTable.COLUMN_COUNT, count+1);
+        Log.e("PrayerDbHelper", "updating prayer " + prayer_id);
         // updating row
         return db.update(PrayersTable.TABLE_NAME, values, PrayersTable._ID + " = ?",
-                new String[] { String.valueOf(p.getId()) });
+                new String[] { String.valueOf(prayer_id) });
     }
+
+    /*
+    * return the count for a single prayer
+    */
+    public int getPrayerCount(long prayer_id){
+        SQLiteDatabase db = this.getReadableDatabase();
+        String selectQuery = PrayersTable.SQL_GET_COUNT + prayer_id;
+        Log.e("PrayerDbHelper", selectQuery);
+
+        Cursor c = db.rawQuery(selectQuery, null);
+        if (c != null)
+            c.moveToFirst();
+
+        return c.getInt(c.getColumnIndex(PrayersTable.COLUMN_COUNT));
+    }
+
 
     /*
     * return a single Prayer from PrayersTable
     */
     public Prayer getPrayer(long prayer_id) {
         SQLiteDatabase db = this.getReadableDatabase();
-
         String selectQuery = "SELECT  * FROM " + PrayersTable.TABLE_NAME + " WHERE "
                 + PrayersTable._ID + " = " + prayer_id;
-
         Log.e("PrayerDbHelper", selectQuery);
 
         Cursor c = db.rawQuery(selectQuery, null);
-
         if (c != null)
             c.moveToFirst();
 
@@ -113,7 +130,6 @@ public class PrayerDbHelper extends SQLiteOpenHelper{
         p.setMessage(c.getString(c.getColumnIndex(PrayersTable.COLUMN_MESSAGE)));
         p.setCategory(c.getString(c.getColumnIndex(PrayersTable.COLUMN_CATEGORY)));
         p.setCounter(c.getInt(c.getColumnIndex(PrayersTable.COLUMN_COUNT)));
-
         return p;
     }
 
@@ -150,7 +166,6 @@ public class PrayerDbHelper extends SQLiteOpenHelper{
     * Deletes a Prayer from database
     */
     public void deletePrayer(long prayer_id) {
-        Log.e("PrayerDbHelper", "deletePrayer() has been called");
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(PrayersTable.TABLE_NAME, PrayersTable._ID + " = ?",
                 new String[] { String.valueOf(prayer_id) });

@@ -38,4 +38,8 @@ public class PrayersTable {
 
     public static final String SQL_DELETE_ENTRIES =
             "DROP TABLE IF EXISTS " + TABLE_NAME;
+
+    // must provide a long id
+    public static final String SQL_GET_COUNT = "SELECT " + COLUMN_COUNT + " FROM " + TABLE_NAME + " WHERE "
+            + _ID + " = " ;
 }
