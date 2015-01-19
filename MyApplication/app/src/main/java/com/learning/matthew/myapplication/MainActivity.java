@@ -15,12 +15,10 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
+import java.util.ArrayList;
 
-import com.learning.matthew.myapplication.database.Person;
 import com.learning.matthew.myapplication.database.Prayer;
 import com.learning.matthew.myapplication.database.PrayerDbHelper;
-
-import java.util.ArrayList;
 
 public class MainActivity extends Activity{
 

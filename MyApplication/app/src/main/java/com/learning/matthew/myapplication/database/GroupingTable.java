@@ -14,13 +14,13 @@ public class GroupingTable {
 
     // column name and data type
     protected static final String _ID = "Grouping_ID";
-    protected static final String COLUMN_GROUP_NAME = "groupName";
+    protected static final String COLUMN_NAME = "groupName";
     protected static final String TEXT = " TEXT";
 
     public static final String CREATE_SQL_ENTREES =
             CREATE_TABLE + TABLE_NAME + " (" +
                     _ID + " INTEGER PRIMARY KEY AUTOINCREMENT" + COMMA_SEP +
-                    COLUMN_GROUP_NAME + TEXT + ")";
+                    COLUMN_NAME + TEXT + ")";
 
     public static final String SQL_DELETE_ENTRIES =
             "DROP TABLE IF EXISTS " + TABLE_NAME;
