@@ -10,6 +10,7 @@ public class Prayer {
     private long id;
     private String name, message, category;
     private int counter;
+    private long group_number;
 
     // constructor
     public Prayer(String n, String m, String cat){
@@ -50,6 +51,11 @@ public class Prayer {
         return id;
     }
 
+    // return group number
+    public long getGroup(){
+        return group_number;
+    }
+
     // set id
     public void setId(long id){
         this.id = id;
@@ -70,14 +76,14 @@ public class Prayer {
         this.category = category;
     }
 
+    // set group
+    public void setGroup(long group){
+        this.group_number = group;
+    }
+
     // set counter
     public void setCounter(int count){
        this.counter = count;
-    }
-
-    // increases the count by one
-    public void pray(){
-        this.counter++;
     }
 
     // returns the count
