@@ -136,9 +136,9 @@ public class MainActivity extends Activity{
             increasePrayerCount.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View v){
-                    int pos = (Integer)v.getTag();
-                    db.increaseCount(item_id.get(pos));
-                    increasePrayerCount.setText("" + db.getPrayerCount(item_id.get(pos)));
+                    long id = item_id.get((Integer)v.getTag());
+                    db.increaseCount(id);
+                    increasePrayerCount.setText("" + db.getPrayerCount(id));
                 }
             });
 
@@ -147,8 +147,8 @@ public class MainActivity extends Activity{
                 @Override
                 public void onClick(View v){
                     int pos = (Integer)v.getTag();
-                    Prayer thisPrayer = db.getPrayer(item_id.get(pos));
-                    db.deletePrayer(thisPrayer.getId());
+                    long id = item_id.get(pos);
+                    db.deletePrayer(id);
                     item_id.remove(pos);
                     adapter.notifyDataSetChanged();
                 }
