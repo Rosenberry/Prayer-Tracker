@@ -46,7 +46,6 @@ public class PrayerDbHelper extends SQLiteOpenHelper{
     // called when the app is updated and the db version is different
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion)
     {
-
     }
 
     public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion)
@@ -178,6 +177,7 @@ public class PrayerDbHelper extends SQLiteOpenHelper{
 
         ContentValues values = new ContentValues();
         values.put(GroupingTable.COLUMN_NAME, group.getName());
+        values.put(GroupingTable.COLUMN_DESCRIPTION, group.getDescription());
 
         // insert row
         return db.insert(PrayersTable.TABLE_NAME, null, values);
@@ -197,6 +197,7 @@ public class PrayerDbHelper extends SQLiteOpenHelper{
             c.moveToFirst();
         Group group = new Group();
         group.setName(c.getString(c.getColumnIndex(GroupingTable.COLUMN_NAME)));
+        group.setDescription(c.getString(c.getColumnIndex(GroupingTable.COLUMN_DESCRIPTION)));
         group.setId(group_id);
 
         return group;
@@ -217,11 +218,11 @@ public class PrayerDbHelper extends SQLiteOpenHelper{
             do {
                 Group group = new Group();
                 group.setName((c.getString(c.getColumnIndex(GroupingTable.COLUMN_NAME))));
+                group.setDescription(c.getString(c.getColumnIndex(GroupingTable.COLUMN_DESCRIPTION)));
                 group.setId(c.getLong(c.getColumnIndex(GroupingTable._ID)));
                 groups.add(group);
             } while (c.moveToNext());
         }
-
         return groups;
     }
 
