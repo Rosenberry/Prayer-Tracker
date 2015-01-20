@@ -6,7 +6,7 @@
         android:allowBackup="true"
         android:icon="@drawable/supervisor"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme" >
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name" >
@@ -19,6 +19,14 @@
         <activity
             android:name=".AddNewPrayer"
             android:label="@string/title_activity_add_new_prayer"
+            android:parentActivityName=".MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.learning.matthew.myapplication.MainActivity" />
+        </activity>
+        <activity
+            android:name=".ViewPrayersByGroup"
+            android:label="@string/title_activity_view_prayers_by_group"
             android:parentActivityName=".MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

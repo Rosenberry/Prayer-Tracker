@@ -1,0 +1,9 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.learning.matthew.myapplication.ViewPrayersByGroup">
+    <item android:title="@string/add_prayer_string_title"
+        android:id="@+id/add_prayer_to_group"
+        android:icon="@drawable/add_green_handdrawn"
+        android:orderInCategory="1"
+        android:showAsAction="ifRoom" />
+</menu>
