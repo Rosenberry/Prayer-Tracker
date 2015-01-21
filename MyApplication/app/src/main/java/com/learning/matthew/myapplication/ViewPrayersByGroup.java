@@ -26,26 +26,32 @@ import com.learning.matthew.myapplication.database.PrayerDbHelper;
 public class ViewPrayersByGroup extends Activity {
 
     private ArrayList<Long> prayer_ids;
+    private long group_id;
     private ListView listView;
     private PrayerItemAdapter adapter;
     PrayerDbHelper db;
-    final static int ADD_PRAYER_REQUEST_CODE = 1;
-    final static int ADD_PRAYER_RESULT_CODE = 1;
+    Intent resultIntent;
+    final static int ADD_PRAYER_REQUEST_CODE = 77;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_prayers_by_group);
-        prayer_ids = new ArrayList<Long>();
+
+        db = new PrayerDbHelper(getApplicationContext());
+        resultIntent = getIntent();
+        group_id = resultIntent.getLongExtra("group_id",0);
+        prayer_ids = db.getPrayerIdsByGroup(group_id);
+
         listView = (ListView) findViewById(R.id.prayers_by_group_listview);
         adapter = new PrayerItemAdapter(this, R.layout.prayer_item, prayer_ids);
         listView.setAdapter(adapter);
-        db = new PrayerDbHelper(getApplicationContext());
+
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data){
         if(requestCode == ADD_PRAYER_REQUEST_CODE)
-            if(resultCode == ADD_PRAYER_RESULT_CODE){
+            if(resultCode == RESULT_OK){
 
                 // get attached information from intent
                 String name = data.getStringExtra(AddNewPrayer.NAME);
@@ -54,7 +60,7 @@ public class ViewPrayersByGroup extends Activity {
 
 
                 // add a new prayer to the users list and update adapter
-                long newId = db.insertPrayer(new Prayer(name, message, category));
+                long newId = db.insertPrayer(new Prayer(name, message, category, group_id));
                 prayer_ids.add(new Long(newId));
                 adapter.notifyDataSetChanged();
                 Log.e("ViewPrayersByGroup", "adapter notified of change");

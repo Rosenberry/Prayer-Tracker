@@ -12,5 +12,6 @@
     <string name="title_activity_add_new_prayer">AddNewPrayer</string>
     <string name="title_activity_view_prayers_by_category">ViewPrayersByCategory</string>
     <string name="title_activity_view_prayers_by_group">ViewPrayersByGroup</string>
+    <string name="title_activity_add_group">AddGroup</string>
 
 </resources>

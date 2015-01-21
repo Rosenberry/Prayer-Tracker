@@ -12,7 +12,13 @@ public class Group {
     public Group(){}
 
     // constructor
-    public Group(String name){this.name = name;}
+    public Group(String name){setName(name);}
+
+    // constructor
+    public Group(String name, String description){
+        setName(name);
+        setDescription(description);
+    }
 
     // set name
     public void setName(String name){this.name = name;}
@@ -24,7 +30,7 @@ public class Group {
     public void setId(long id){this.id = id;}
 
     // return name
-    String getName(){return name;}
+    public String getName(){return name;}
 
     // return description
     public String getDescription() {return description;}

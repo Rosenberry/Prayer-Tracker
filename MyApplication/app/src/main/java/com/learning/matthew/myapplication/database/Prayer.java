@@ -20,11 +20,11 @@ public class Prayer {
     }
 
     // constructor
-    public Prayer(String n, String m, String cat, long id){
+    public Prayer(String n, String m, String cat, long group_id){
         this.name = n;
         this.message = m;
         this.category = cat;
-        this.id = id;
+        this.group_number = group_id;
     }
 
     // empty constructor

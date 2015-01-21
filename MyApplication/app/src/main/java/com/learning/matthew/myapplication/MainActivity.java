@@ -10,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -17,6 +18,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import java.util.ArrayList;
 
+import com.learning.matthew.myapplication.database.Group;
 import com.learning.matthew.myapplication.database.Prayer;
 import com.learning.matthew.myapplication.database.PrayerDbHelper;
 
@@ -24,12 +26,12 @@ public class MainActivity extends Activity{
 
 
 
-    private ArrayList<Long> prayer_ids;
+    private ArrayList<Long> group_ids;
     private ListView listView;
-    private PrayerItemAdapter adapter;
+    private GroupItemAdapter adapter;
     PrayerDbHelper db;
-    final static int ADD_PRAYER_REQUEST_CODE = 1;
-    final static int ADD_PRAYER_RESULT_CODE = 1;
+    final static int ADD_GROUP_REQUEST_CODE = 25;
+    final static int VIEW_PRAYERS_REQUEST_CODE = 50;
     public static ArrayList<String> Categories;
 
     @Override
@@ -37,12 +39,20 @@ public class MainActivity extends Activity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        prayer_ids = new ArrayList<Long>();
+        group_ids = new ArrayList<Long>();
         listView = (ListView) findViewById(R.id.listview);
-        adapter = new PrayerItemAdapter(this, R.layout.prayer_item, prayer_ids);
+        adapter = new GroupItemAdapter(this, R.layout.prayer_item, group_ids);
         listView.setAdapter(adapter);
-        db = new PrayerDbHelper(getApplicationContext());
+        setListViewOnItemClickListener();
         Categories = new ArrayList<String>();
+        addItemsToCategories();
+
+        // get the database
+        db = new PrayerDbHelper(getApplicationContext());
+    }
+
+    // populate Categories
+    public void addItemsToCategories(){
         Categories.add("Request");
         Categories.add("Praise");
         Categories.add("Protection");
@@ -51,19 +61,35 @@ public class MainActivity extends Activity{
         Categories.add("Healing");
     }
 
+    // set onItemClickListener for the ListView
+    public void setListViewOnItemClickListener(){
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position,
+                                    long id) {
+                Log.e("MainActivity", "listview item selected at position " + position);
+                long group_id = group_ids.get((Integer) view.getTag());
+                Intent intent = new Intent(getApplicationContext(), ViewPrayersByGroup.class);
+                intent.putExtra("group_id", group_id);
+                Log.e("MainActivity", "starting new activity");
+                startActivityForResult(intent, VIEW_PRAYERS_REQUEST_CODE);
+
+            }
+        });
+    }
+
     public void onActivityResult(int requestCode, int resultCode, Intent data){
-        if(requestCode == ADD_PRAYER_REQUEST_CODE)
-            if(resultCode == ADD_PRAYER_RESULT_CODE){
+        if(requestCode == ADD_GROUP_REQUEST_CODE)
+            if(resultCode == RESULT_OK){
+
 
                 // get attached information from intent
-                String name = data.getStringExtra(AddNewPrayer.NAME);
-                String message = data.getStringExtra(AddNewPrayer.MESSAGE);
-                String category = data.getStringExtra(AddNewPrayer.CATEGORY);
-
+                String title = data.getStringExtra(AddGroup.TITLE);
+                String description = data.getStringExtra(AddGroup.DESCRIPTION);
 
                 // add a new prayer to the users list and update adapter
-                long newId = db.insertPrayer(new Prayer(name, message, category));
-                prayer_ids.add(new Long(newId));
+                long newId = db.insertGroup(new Group(title, description));
+                group_ids.add(new Long(newId));
                 adapter.notifyDataSetChanged();
                 Log.e("MainActivity", "adapter notified of change");
             }
@@ -82,76 +108,64 @@ public class MainActivity extends Activity{
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        if (id == R.id.add_prayer) {
-            Intent intent = new Intent(this, AddNewPrayer.class);
-            startActivityForResult(intent, ADD_PRAYER_REQUEST_CODE);
+        if (id == R.id.add_group) {
+            Intent intent = new Intent(this, AddGroup.class);
+            startActivityForResult(intent, ADD_GROUP_REQUEST_CODE);
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
 
-    public class PrayerItemAdapter extends ArrayAdapter<Long> {
-            Context context;
-            int resourceId;
-            ArrayList<Long> item_id;
+    public class GroupItemAdapter extends ArrayAdapter<Long> {
+        Context context;
+        int resourceId;
+        ArrayList<Long> group_item_id;
 
-            public PrayerItemAdapter(Context context, int resourceId, ArrayList<Long> items) {
-                super(context, resourceId, items);
-                this.context = context;
-                this.resourceId = resourceId;
-                this.item_id = items;
+        public GroupItemAdapter(Context context, int resourceId, ArrayList<Long> items) {
+            super(context, resourceId, items);
+            this.context = context;
+            this.resourceId = resourceId;
+            this.group_item_id = items;
+        }
+
+        public View getView(int position, View convertView, ViewGroup parent) {
+            View v = convertView;
+            if (v == null) {
+                LayoutInflater vi = getLayoutInflater();
+                v = vi.inflate(R.layout.group_item, null);
             }
 
-            public View getView(int position, View convertView, ViewGroup parent) {
-                View v = convertView;
-                if (v == null) {
-                    LayoutInflater vi = getLayoutInflater();
-                    v = vi.inflate(R.layout.prayer_item, null);
-                }
+            // instantiate the views for each list item
+            TextView group_title = (TextView) v.findViewById(R.id.group_title);
+            TextView group_description = (TextView) v.findViewById(R.id.group_description);
+            ImageButton group_delete = (ImageButton) v.findViewById(R.id.group_delete);
 
-                // instantiate the views for each list item
-                TextView title = (TextView) v.findViewById(R.id.title);
-                TextView category = (TextView) v.findViewById(R.id.category);
-                TextView message = (TextView) v.findViewById(R.id.message);
-                ImageButton delete = (ImageButton) v.findViewById(R.id.delete);
-                final Button increasePrayerCount = (Button) v.findViewById(R.id.counterButton);
+            // set tags, used to tell objects apart later
+            group_delete.setTag(position);
+            v.setTag(position);
+            group_delete.setFocusable(false);
 
-                // set tags, used to tell objects apart later
-                delete.setTag(position);
-                increasePrayerCount.setTag(position);
+            // get the related prayer from database
+            long currentGroup_id = group_item_id.get(position);
+            Group dbCurrentGroup = db.getGroup(currentGroup_id);
 
-                // get the related prayer from database
-                long currentPrayer_id = item_id.get(position);
-                Prayer dbCurrentPrayer = db.getPrayer(currentPrayer_id);
-
-                // set the text for each list item
-                title.setText(dbCurrentPrayer.getName());
-                category.setText(dbCurrentPrayer.getCategory());
-                message.setText(dbCurrentPrayer.getMessage());
-
-            // set onClick to count number of prayers
-            increasePrayerCount.setOnClickListener(new View.OnClickListener(){
-                @Override
-                public void onClick(View v){
-                    long id = item_id.get((Integer)v.getTag());
-                    db.increaseCount(id);
-                    increasePrayerCount.setText("" + db.getPrayerCount(id));
-                }
-            });
+            // set the text for each list item
+            group_title.setText(dbCurrentGroup.getName());
+            group_description.setText(dbCurrentGroup.getDescription());
 
             // set onClick to remove prayers from the list
-            delete.setOnClickListener(new View.OnClickListener(){
+            group_delete.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View v){
-                    int pos = (Integer)v.getTag();
-                    long id = item_id.get(pos);
-                    db.deletePrayer(id);
-                    item_id.remove(pos);
+                public void onClick(View v) {
+                    int pos = (Integer) v.getTag();
+                    long id = group_item_id.get(pos);
+                    db.deleteGroup(id);
+                    group_item_id.remove(pos);
                     adapter.notifyDataSetChanged();
                 }
             });
-            return v;
+        return v;
+        }
     }
-}
 }

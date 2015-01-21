@@ -16,7 +16,7 @@ import java.util.ArrayList;
  */
 public class PrayerDbHelper extends SQLiteOpenHelper{
 
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 3;
     private static final String DATABASE_NAME = "Prayer.database";
 
     private static PrayerDbHelper instance = null;
@@ -46,6 +46,10 @@ public class PrayerDbHelper extends SQLiteOpenHelper{
     // called when the app is updated and the db version is different
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion)
     {
+
+        db.execSQL(GroupingTable.SQL_DELETE_ENTRIES);
+        db.execSQL(PrayersTable.SQL_DELETE_ENTRIES);
+        onCreate(db);
     }
 
     public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion)
@@ -180,7 +184,7 @@ public class PrayerDbHelper extends SQLiteOpenHelper{
         values.put(GroupingTable.COLUMN_DESCRIPTION, group.getDescription());
 
         // insert row
-        return db.insert(PrayersTable.TABLE_NAME, null, values);
+        return db.insert(GroupingTable.TABLE_NAME, null, values);
     }
 
     /*
@@ -251,6 +255,28 @@ public class PrayerDbHelper extends SQLiteOpenHelper{
         }
 
         return prayers;
+    }
+
+    /*
+    ** return a list of prayer id's associated with a group
+     */
+    public ArrayList<Long> getPrayerIdsByGroup(long group_id){
+        ArrayList<Long> prayer_ids = new ArrayList<Long>();
+        String selectQuery = "SELECT  " + PrayersTable._ID + " FROM " + PrayersTable.TABLE_NAME + " WHERE "
+                + PrayersTable.COLUMN_LINK + " = " + group_id;
+        Log.e("PrayerDbHelper", selectQuery);
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        // looping through all rows and adding to list
+        if (c.moveToFirst()) {
+            do {
+                prayer_ids.add(c.getLong(c.getColumnIndex(PrayersTable._ID)));
+            } while (c.moveToNext());
+        }
+
+        return prayer_ids;
     }
 
     /*

@@ -1,9 +1,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".MainActivity" >
-    <item android:title="@string/add_prayer_string_title"
-        android:id="@+id/add_prayer"
-        android:icon="@drawable/add_green_handdrawn"
+    <item android:title="Add Group"
+        android:id="@+id/add_group"
         android:orderInCategory="1"
         android:showAsAction="ifRoom" />
 </menu>

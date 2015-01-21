@@ -11,12 +11,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
-import com.learning.matthew.myapplication.database.Person;
-
 
 public class AddNewPrayer extends Activity {
 
-    private final int RESULT_CODE = MainActivity.ADD_PRAYER_RESULT_CODE;
     private EditText editName;
     private EditText editMessage;
     private Spinner categorySpinner;
@@ -57,7 +54,7 @@ public class AddNewPrayer extends Activity {
         returnIntent.putExtra(CATEGORY, String.valueOf(categorySpinner.getSelectedItem()));
 
         // set the result
-        setResult(RESULT_CODE, returnIntent);
+        setResult(RESULT_OK, returnIntent);
 
         // leave the activity
         finish();

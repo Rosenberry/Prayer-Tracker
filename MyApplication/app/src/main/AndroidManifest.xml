@@ -32,6 +32,10 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.learning.matthew.myapplication.MainActivity" />
         </activity>
+        <activity
+            android:name=".AddGroup"
+            android:label="@string/title_activity_add_group" >
+        </activity>
     </application>
 
 </manifest>
