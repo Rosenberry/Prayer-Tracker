@@ -39,16 +39,17 @@ public class MainActivity extends Activity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // get the database
+        db = new PrayerDbHelper(getApplicationContext());
         group_ids = new ArrayList<Long>();
+        group_ids = db.getGroupIds();
+
         listView = (ListView) findViewById(R.id.listview);
         adapter = new GroupItemAdapter(this, R.layout.prayer_item, group_ids);
         listView.setAdapter(adapter);
         setListViewOnItemClickListener();
         Categories = new ArrayList<String>();
         addItemsToCategories();
-
-        // get the database
-        db = new PrayerDbHelper(getApplicationContext());
     }
 
     // populate Categories

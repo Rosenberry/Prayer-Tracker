@@ -42,11 +42,11 @@ public class ViewPrayersByGroup extends Activity {
         resultIntent = getIntent();
         group_id = resultIntent.getLongExtra("group_id",0);
         prayer_ids = db.getPrayerIdsByGroup(group_id);
+        Log.e("ViewPrayersByGroup", "prayers recieved");
 
         listView = (ListView) findViewById(R.id.prayers_by_group_listview);
         adapter = new PrayerItemAdapter(this, R.layout.prayer_item, prayer_ids);
         listView.setAdapter(adapter);
-
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data){
@@ -129,6 +129,8 @@ public class ViewPrayersByGroup extends Activity {
             title.setText(dbCurrentPrayer.getName());
             category.setText(dbCurrentPrayer.getCategory());
             message.setText(dbCurrentPrayer.getMessage());
+            if(db.getPrayerCount(currentPrayer_id)!=0)
+                increasePrayerCount.setText("" + db.getPrayerCount(currentPrayer_id));
 
             // set onClick to count number of prayers
             increasePrayerCount.setOnClickListener(new View.OnClickListener() {

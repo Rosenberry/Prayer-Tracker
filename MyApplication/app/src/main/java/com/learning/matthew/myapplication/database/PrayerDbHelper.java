@@ -69,7 +69,7 @@ public class PrayerDbHelper extends SQLiteOpenHelper{
         values.put(PrayersTable.COLUMN_CATEGORY, p.getCategory());
         values.put(PrayersTable.COLUMN_MESSAGE, p.getMessage());
         values.put(PrayersTable.COLUMN_COUNT, p.getNumPrayers());
-        //TODO: put other data for the table into values
+        values.put(PrayersTable.COLUMN_LINK, p.getGroup());
 
         // insert row
         return db.insert(PrayersTable.TABLE_NAME, null, values);
@@ -277,6 +277,27 @@ public class PrayerDbHelper extends SQLiteOpenHelper{
         }
 
         return prayer_ids;
+    }
+
+    /*
+    ** return a list of all Group id's
+     */
+    public ArrayList<Long> getGroupIds(){
+        ArrayList<Long> group_ids = new ArrayList<Long>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        String selectQuery = "SELECT  * FROM " + GroupingTable.TABLE_NAME;
+        Log.e("PrayerDbHelper", selectQuery);
+
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        // looping through all rows and adding to list
+        if (c.moveToFirst()) {
+            do {
+                group_ids.add(c.getLong(c.getColumnIndex(GroupingTable._ID)));
+            } while (c.moveToNext());
+        }
+
+        return group_ids;
     }
 
     /*
